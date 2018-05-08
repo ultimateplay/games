@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sudoku</title>
+  <style>
+    button, select, option {
+      color: #ffffff;
+      background-color: #204d74;
+      border-color: #122b40;
+    }
+  </style>
+</head>
+
+<body>
+
+<script>
+
+  
+  let startMatrix = [
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+  ];
+  
+  
+  let startMatrix0 = [
+    [ 3, 6, 4,  ,  , 5,  ,  , 7 ],
+    [ 7,  ,  ,  ,  ,  ,  ,  , 3 ],
+    [ 5,  , 1,  , 7,  , 8, 6, 4 ],
+    [  ,  , 6, 2, 5,  ,  , 8,   ],
+    [ 4,  , 9,  , 1,  , 6,  , 5 ],
+    [  , 5,  ,  , 6, 7, 4,  ,   ],
+    [ 6, 8, 5,  , 3,  , 9,  , 2 ],
+    [ 9,  ,  ,  ,  ,  ,  ,  , 8 ],
+    [ 2,  ,  , 7,  ,  , 5, 1, 6 ],
+  ];
+
+  let startMatrix1 = [
+    [ 2,  , 4, 7,  ,  ,  , 3, 6 ],
+    [ 8, 7, 3,  , 5,  , 4,  , 3 ],
+    [  , 2,  ,  , 2, 4, 9, 8,   ],
+    [ 4,  ,  ,  , 8,  ,  ,  ,   ],
+    [ 9, 6, 8,  ,  ,  , 3, 5, 4 ],
+    [  ,  ,  ,  , 3,  ,  ,  , 8 ],
+    [  , 2, 6, 1, 9,  ,  , 4,   ],
+    [  ,  , 9,  , 4,  , 6, 7, 2 ],
+    [ 5, 4,  ,  ,  , 2, 1,  , 3 ],
+  ];
+  
+  let startMatrix2 = [
+    [ 3,  ,  , 7, 4, 1, 5, 9,   ],
+    [  ,  ,  ,  , 9,  , 1,  ,   ],
+    [ 1,  ,  , 6,  , 5, 8, 2,   ],
+    [  , 4, 2,  , 8,  , 3,  ,   ],    
+    [ 7, 6, 9,  ,  ,  , 4, 8, 1 ],
+    [  ,  , 3,  , 6,  , 9, 5,   ],
+    [  , 8, 1, 5,  , 6,  ,  , 9 ],
+    [  ,  , 5,  , 1,  ,  ,  ,   ],
+    [  , 3, 6, 8, 2, 4,  ,  , 5 ],
+  ];
+
+  let startMatrix2END = [
+    [ 3, 2, 8, 7, 4, 1, 5, 9, 6 ],
+    [ 6, 5,  ,  , 9, 8, 1, 7, 3 ],
+    [ 1, 9, 7, 6, 3, 5, 8, 2, 4 ],
+    [ 5, 4, 2, 1, 8, 9, 3, 6, 7 ],    
+    [ 7, 6, 9, 3, 5, 2, 4, 8, 1 ],
+    [ 8, 1, 3, 4, 6, 7, 9, 5, 2 ],
+    [ 4, 8, 1, 5, 7, 6, 2, 3, 9 ],
+    [ 2, 7, 5, 9, 1, 3, 6, 4, 8 ],
+    [ 9, 3, 6, 8, 2, 4, 7, 1, 5 ],
+  ];
+
+  
+  let startMatrix1END = [
+    [ 3, 6, 4,  , 8, 5, 2, 9, 7 ],
+    [ 7, 2, 8, 6, 4, 9, 1, 5, 3 ],
+    [ 5, 9, 1, 3, 7, 2, 8, 6, 4  ],
+    [ 1, 3, 6, 2, 5, 4, 7, 8, 9 ],
+    [ 4, 7, 9, 8, 1, 3, 6, 2, 5 ],
+    [ 8, 5, 2, 9, 6, 7, 4, 3, 1 ],
+    [ 6, 8, 5, 4, 3, 1, 9, 7, 2 ],
+    [ 9, 1, 7, 5, 2, 6, 3, 4, 8 ],
+    [ 2, 4, 3, 7, 9, 8, 5, 1, 6 ],
+  ];
+  
+  let playMatrix = [
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+    [ , , , , , , , , ],
+  ];
+  
+  
+  let finished;
+  
+  let selGameValue, selGameIndex = 0;
+  
+  game();
+  
+  function game() {
+  
+    finished = false;
+  
+    
+    
+    
+    body = document.body;
+    body.style.fontFamily = "Arial";
+    //bd.style.backgroundColor = "yellow";
+    //alert(body.id);
+
+    // info div
+    info = document.createElement('div');
+    info.id = "info";
+    info.className = "info";
+    info.style.position = "absolute";
+    info.style.left = "0px";
+    info.style.top = "0px";
+    info.style.padding = "3px";
+    //main.style.display = "inline-block";
+    info.innerHTML = "info<br>-----<br>";
+    info.style.border = "solid 1px black";
+    //body.appendChild(info);
+  
+    
+    // header div
+    header = document.createElement('div');
+    header.id = "header";
+    header.className = "header";
+    header.style.maxWidth = "606px";
+    //header.style.height = "606px";
+    //header.style.display = "inline-block";
+    header.style.display = "flex";
+    header.style.flexWrap = "wrap";
+    header.style.margin = "30px auto 0px auto";
+    //header.innerHTML = "text";
+    header.style.border = "solid 0px black";
+    //header.style.outline = "solid 1px black";
+      header.style.position = "relative";
+    header.style.padding = "0";
+    //header.style.boxSizing = "border-box";
+    body.appendChild(header);
+
+
+    // Select game
+    selectGame = document.createElement('select');
+    selectGame.className = "selectgame";
+    selectGame.id = "selectgame";
+    selectGame.name = "selectgame";
+    let games = ["Game 1", "Game 2", "Game 3"];
+    for (let i = 0; i < games.length; i++) {
+      var option = document.createElement("option");
+      option.value = games[i];
+      option.text = games[i];
+      if (selGameIndex == i) { option.selected = "selected";}
+      selectGame.appendChild(option);
+    }
+    selectGame.style.display = "block";
+    selectGame.style.padding = "7px 13px";
+    selectGame.style.fontSize = "15px";
+    selectGame.style.fontWeight = "bold";
+    selectGame.style.margin = "15px 20px 15px auto";
+    selectGame.style.maxWidth = "160px";
+    selectGame.style.borderRadius = "4px";
+    selectGame.style.float = "left";
+    selectGame.addEventListener("change", function(event) {chooseGame(event)}, false);
+    header.appendChild(selectGame);
+
+    //
+    
+    // New Game Button
+    btnNewGame = document.createElement('button');
+    btnNewGame.className = "newgame";
+    btnNewGame.innerHTML = "New Game";
+
+    btnNewGame.style.display = "block";
+    btnNewGame.style.padding = "7px 13px";
+    btnNewGame.style.fontSize = "15px";
+    btnNewGame.style.fontWeight = "bold";
+    btnNewGame.style.margin = "15px auto 15px 20px";
+    btnNewGame.style.maxWidth = "160px";
+    btnNewGame.style.borderRadius = "4px";
+    btnNewGame.addEventListener("click", function() {newGame()}, false);
+    header.appendChild(btnNewGame);
+    
+    
+    
+    
+    // Main div
+    main = document.createElement('div');
+    main.id = "main";
+    main.className = "main";
+    main.style.maxWidth = "606px";
+    main.style.height = "606px";
+    //main.style.display = "inline-block";
+    main.style.display = "flex";
+    main.style.flexWrap = "wrap";
+    main.style.margin = "0px auto 5px auto";
+    //main.innerHTML = "text";
+    main.style.border = "solid 4px black";
+    //main.style.outline = "solid 1px black";
+      main.style.position = "relative";
+    main.style.padding = "0";
+    //main.style.boxSizing = "border-box";
+    body.appendChild(main);
+
+    // Check for Victory button
+    btnVictory = document.createElement('button');
+    btnVictory.className = "victory";
+    btnVictory.className = "victory";
+    btnVictory.innerHTML = "Check for Victory";
+    btnVictory.style.display = "block";
+    btnVictory.style.padding = "7px 13px";
+    btnVictory.style.fontSize = "15px";
+    btnVictory.style.fontWeight = "bold";
+    btnVictory.style.margin = "10px auto";
+    btnVictory.style.maxWidth = "160px";
+    btnVictory.style.borderRadius = "4px";
+    btnVictory.addEventListener("click", function() {checkVictory()}, false);
+    body.appendChild(btnVictory);
+  
+  
+  for(let i = 0; i < 3; i++ ) {
+    for( let j = 0; j < 3; j++ ) {
+      div = document.createElement('div');
+      div.id = "box" + j + "-" + i;
+      div.className = "box";
+      div.style.width = "202px";
+      div.style.height = "202px";
+      
+      //div.innerHTML = i + "-" + j;
+      //div.style.border = "solid 1px black";
+      div.style.outline = "solid 1px black";
+      
+      div.style.position = "relative";
+      //div.style.display = "inline-block";
+      div.style.margin = "0";
+      
+      if (i == 0) {
+        div.style.padding = "0px 0 0 1px";
+      } else {
+        div.style.padding = "1px 0 0 1px";
+      }
+      
+      
+      //info.innerHTML += div.style.margin + "<br>";
+      div.style.display = "flex";
+      div.style.flexWrap = "wrap";
+      
+      div.style.boxSizing = "border-box";
+      div.style.overflow = "hidden";
+      div.style.borderCollapse = "collapse";
+      //div.addEventListener("click", function(event) {middleInput(event)}, false);
+      main.appendChild(div);
+      
+      for(let k = 0; k < 3; k++) {
+        for(let l = 0; l < 3; l++) {
+          divplay = document.createElement('div');
+          
+          //info.innerHTML += i + " " + j + " " + k + " " + l + " " + (3 * (i - 1) + k) + " " + (3 * (j - 1) + l) + "<br>";
+          
+          divplay.id = "play" + (3 * (j) + l) + "-" + (3 * (i) + k);
+          divplay.className = "play";
+          divplay.style.width = "67px";
+          divplay.style.height = "67px";
+          
+          divplay.style.textAlign = "center";
+          //divplay.style.verticalAlign = "middle";
+          //divplay.innerHTML = k + "-" + l;
+          //divplay.style.border = "solid 1px gray";
+          divplay.style.borderStyle = "solid";
+          //divplay.style.borderWidth = "1px 1px 0px 0px";
+          
+          
+          //info.innerHTML += l + " " + (l == 1 && k == 1) +  " " + k +  "<br>"
+          if ( l == 0 && k == 0) {
+            divplay.style.borderWidth = "0px 1px 1px 0px";
+          }
+          if ( l == 1 && k == 0) {
+            divplay.style.borderWidth = "0px 1px 1px 0px";
+          }
+          if ( l == 2 && k == 0) {
+            divplay.style.borderWidth = "0px 0px 1px 0px";
+          }
+          if ( l == 0 && k == 1) {
+            divplay.style.borderWidth = "0px 1px 1px 0px";
+          }
+          if ( l == 1 && k == 1) {
+            divplay.style.borderWidth = "0px 1px 1px 0px";
+          }
+          if ( l == 2 && k == 1) {
+            divplay.style.borderWidth = "0px 0px 1px 0px";
+          }
+          if ( l == 0 && k == 2) {
+            divplay.style.borderWidth = "0px 1px 0px 0px";
+          }
+          if ( l == 1 && k == 2) {
+            divplay.style.borderWidth = "0px 1px 0px 0px";
+          }
+          if ( l == 2 && k == 2) {
+            divplay.style.borderWidth = "0px 0px 0px 0px";
+          }
+
+          
+          
+          divplay.style.borderColor = "lightgray";
+          //divplay.style.outline = "solid 1px lightgray";    
+          divplay.style.display = "table";
+          //divplay.style.display = "flex";
+          divplay.style.padding = "0";
+          divplay.style.margin = "0";
+          divplay.style.boxSizing = "border-box";
+          div.addEventListener("click", function(event) {middleInput(event)}, false);
+          div.appendChild(divplay);          
+          
+          
+          divplayin = document.createElement('div');
+          divplayin.style.display = "table-cell";
+          //divplayin.innerHTML = k + "-" + l;
+          divplayin.style.verticalAlign = "middle";
+          //divplayin.style.border = "1px solid lightgray";
+
+          divplay.appendChild(divplayin);
+          
+/*          form = document.createElement("form");
+          form.style.boxSizing = "border-box";
+          form.style.margin = "0";
+          form.style.padding = "0";          
+          form.onclick = function(){ 
+          //  for(x in this) { info.innerHTML += x + " " + this.x + "<br>"; } 
+            info.innerHTML += this.target.value;
+            
+          };
+form.style.border = "solid 1px blue";  */
+          //divplayin.appendChild(form);
+          
+          input = document.createElement("input")
+          input.setAttribute("type", "text");
+          input.style.width = "91%";
+          //input.style.borderWidth = "0";
+          //input.style.height = "100%";
+          //input.style.minWidth = "100%";
+          //input.style.maxWidth = "100%";          
+          input.style.padding = "5px";
+          input.style.margin = "0px auto";
+          input.style.textAlign = "center";
+          //input.style.fontFamily = "Helvetica";
+          input.style.fontSize = "2em";
+          input.style.fontWeight = "bold";
+          input.style.padding = "0";
+          input.style.margin = "0";
+          input.type = "tel";
+          input.style.border = "none";
+          //input.style.border = "solid 1px red";
+          input.maxLength = "1";
+          //input.onclick = function(){alert(this)};
+          //input.style.height = "40px";
+          input.style.boxSizing = "border-box";
+          //input.onkeypress = function(){check(event)};
+          input.addEventListener("keydown", function(event) {check(event)}, false);
+          input.addEventListener("input", function(event) {cellChanged(event)}, false);
+
+          //input.readOnly = true;
+          //input.disabled = true;
+          //input.addEventListener("focus", function(event) { event.target.readonly = "false"; }, false);
+
+          divplayin.appendChild(input);
+
+        }
+      }
+    }
+  }
+
+
+    info.innerHTML += selGameIndex;
+
+    switch (selGameIndex) {
+      case 0:
+        startMatrix = JSON.parse(JSON.stringify(startMatrix0));
+        break;
+      case 1:
+        startMatrix = JSON.parse(JSON.stringify(startMatrix1));
+        break;
+      case 2:
+        startMatrix = JSON.parse(JSON.stringify(startMatrix2));
+        break;
+    }
+    
+    //document.write(JSON.parse(JSON.stringify(startMatrix1)))
+    
+    
+  // Show the board 
+  for(let i = 0; i < 9; i++) {
+    for(let j = 0; j < 9; j++) {
+      playMatrix[j][i] = startMatrix[j][i];
+      //play = "play" + (i + 1) + "-" + (j + 1);
+      play = "play" + (i) + "-" + (j);
+      
+      //info.innerHTML += play + " " + playMatrix[j][i] + "<br>";
+      
+      //info.innerHTML += play + " " + playMatrix[j][i] + "<br>";
+      
+      if ( playMatrix[j][i] !== undefined && playMatrix[j][i] !== null ) {
+      elem = document.getElementById(play).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+      elem.value = playMatrix[j][i];
+      elem.readOnly = "true";
+      elem.parentNode.style.backgroundColor = "Lavender";
+      elem.style.backgroundColor = "Lavender";
+      }
+    }
+  }
+    
+    
+  }
+   
+  function check(event) {
+    var code = event.which || event.keyCode || event.charCode;
+    //info.innerHTML += code + "<br>";
+    let x, y, play;
+    //alert(code);
+    //alert(event.currentTarget);
+    //info.innerHTML += event.target.value;
+    //alert(event.target.parentNode.parentNode.getAttribute('id'));
+    id = event.target.parentNode.parentNode.getAttribute('id');
+    x = parseInt(id.charAt(4));
+    y = parseInt(id.charAt(6));
+    play = "play" + x + "-" + y;
+    //alert(x + " " + y);
+    
+    //for(x in event.target) { info.innerHTML += x + " " + this.x + "<br>"; }
+    
+    let allow_char = "37,38,39,40,46,49,50,51,52,53,54,55,56,57,116";
+    
+    //info.innerHTML += (allow_char.indexOf(code)  == -1) + "<br>";
+    if(allow_char.indexOf(code) == -1 || code == 0) {
+      event.preventDefault();
+      return;
+    }
+    
+    switch (event.keyCode) {
+        // left
+      case 37: 
+        //info.innerHTML += "left<br>";
+        if ( x > 0 ) x--;
+        play = "play" + x + "-" + y;
+        event.preventDefault();
+        selectCell(play);
+        //document.getElementById(play).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0].focus();
+        break;
+      // right
+      case 39: 
+        //info.innerHTML += "right<br>";
+        if ( x < 8 ) x++;
+        play = "play" + x + "-" + y;
+        event.preventDefault();
+        selectCell(play);
+        break;
+      // up
+      case 38:
+        //info.innerHTML += "up<br>";
+        if ( y > 0 ) y--;
+        play = "play" + x + "-" + y;
+        event.preventDefault();
+        selectCell(play);
+        break;
+      // down
+      case 40: 
+        //info.innerHTML += "down<br>";
+        if ( y < 8 ) y++;        
+        play = "play" + x + "-" + y;
+        event.preventDefault();
+        selectCell(play);        
+        break;
+      // delete
+      case 46:
+        play = "play" + x + "-" + y;
+        document.getElementById(play).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0].value = "";
+        event.preventDefault();
+        event.target.value = "";
+        cellChanged(event);
+        break;
+    }
+
+  }  
+
+  function selectCell(cell) {
+    let elem = document.getElementById(cell).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+    //elem.focus();
+    elem.select();
+    //elem.focus();
+  }
+    
+  function getCell(cell) {
+     //info.innerHTML += document.getElementById(cell).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0].value + "<br>";
+    //for(x in document.getElementById(cell).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0]) { info.innerHTML += x + " " + this.x + "<br>"; } 
+  }
+
+  function cellChanged(event) {
+    //alert(1);
+    // cell value
+    //alert(event.target.value);
+    // cell id
+    //alert(event.target.parentNode.parentNode.getAttribute('id'));
+
+    let cellId;
+    
+    // cell
+    let cell = event.target.parentNode.parentNode;
+    
+    // cell value
+    value = event.target.value;
+    
+    // cell id
+    id = event.target.parentNode.parentNode.getAttribute('id')
+    
+    x = parseInt(id.charAt(4));
+    y = parseInt(id.charAt(6));
+
+    if(value != "") {
+    playMatrix[y][x] = parseInt(value);
+    } else {
+      playMatrix[y][x] = null;
+    }
+    
+    cellId = "play" + x + "-" + y;
+    cell = document.getElementById(cellId).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+    cell.value = value;
+    
+    //info.innerHTML += (value == "") + "<br>";
+    //info.innerHTML = JSON.stringify(playMatrix) + "<br>";
+    
+    //info.innerHTML += value + " " + x + " " + y + "<br>";
+    
+    
+    
+    
+    for(let i = 0; i < 9; i++) {
+      for(let j = 0; j < 9; j++) {
+          let cellId = "play" + j + "-" + i;
+          let cell = document.getElementById(cellId).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+          cell.style.color = "black";
+      }
+    }
+
+    //info.innerHTML += value + " #" + (value != null) + "# " + finished;
+    if (value != "" ) {
+      finished = true;
+    } else {
+      finished = false;
+    }
+    
+    //info.innerHTML += " " + finished + "<br>";
+    
+    for(let i = 0; i < 9; i++) {
+      for(let j = 0; j < 8; j++) {
+        for(let k = j + 1; k < 9; k++) {
+          
+          // check rows
+          cell1Id = "play" + j + "-" + i;
+          cell1 = document.getElementById(cell1Id).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+          
+          cell2Id = "play" + k + "-" + i;
+          cell2 = document.getElementById(cell2Id).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+          
+          //info.innerHTML += cell1Id + " " + cell2Id + " " + cell1.value + " " + cell2.value + " " + (cell1.value != null && cell2.value != null && cell1.value == cell2.value) + "<br>";          
+          
+          if (cell1.value != "" && cell2.value != "" && cell1.value == cell2.value) {
+            cell1.style.color = "red";
+            cell2.style.color = "red";
+            cell1.style.caretColor = "black";
+            cell2.style.caretColor = "black";
+            finished = false;
+          } 
+          
+          //info.innerHTML += (cell1.value == null) + " " + (cell2.value == null) + "<br>"
+          
+          if (cell1.value == "" || cell2.value == "")
+            finished = false;
+          
+          
+          // check columns
+          cell1Id = "play" + i + "-" + j;
+          cell1 = document.getElementById(cell1Id).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+          
+          cell2Id = "play" + i + "-" + k;
+          cell2 = document.getElementById(cell2Id).getElementsByTagName("DIV")[0].getElementsByTagName("INPUT")[0];
+          
+          //info.innerHTML += cell1Id + " " + cell2Id + " " + cell1.value + " " + cell2.value + " " + (cell1.value != null && cell2.value != null && cell1.value == cell2.value) + "<br>";
+          
+          if (cell1.value != "" && cell2.value != "" && cell1.value == cell2.value) {
+            cell1.style.color = "red";
+            cell2.style.color = "red";
+            cell1.style.caretColor = "black";
+            cell2.style.caretColor = "black";
+            finished = false;
+          }
+          
+          //info.innerHTML += (cell1.value == "") + " " + (cell2.value == "") + "<br>"
+          
+          if (cell1.value == "" || cell2.value == "")
+            finished = false;
+        }
+      }
+    }
+
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        
+        let id = "box" + j + "-" + i;
+        let box = document.getElementById(id);
+
+        for(let k = 0; k < 8; k++) {
+          for(let l = k + 1; l < 9; l++) {
+            cell1 = box.children[k].getElementsByTagName("INPUT")[0];
+            cell2 = box.children[l].getElementsByTagName("INPUT")[0];
+          if (cell1.value != "" && cell2.value != "" && cell1.value == cell2.value) {
+            cell1.style.color = "red";
+            cell2.style.color = "red";
+            cell1.style.caretColor = "black";
+            cell2.style.caretColor = "black";
+            finished = false;
+          } 
+           
+          if (cell1.value == "" || cell2.value == "")
+            finished = false;
+
+          }
+        }
+      }
+    }
+    
+
+    //info.innerHTML += "<br>END " + finished;
+    
+  }
+
+  function middleInput(event) {
+    //alert(event.target.parentNode.id);
+    
+    if (event.target.nodeName == "DIV") {
+      event.target.getElementsByTagName("INPUT")[0].select();
+    }
+  }
+  
+  function checkVictory() {
+    
+    if(finished == true) {
+    
+      finished = false;
+      
+      win = document.createElement('div');
+      win.id = "win";
+      win.className = "win";
+      //win.style.maxWidth = "606px";
+      win.style.width = "599px";
+      win.style.height = "599px";
+      win.style.display = "table";
+      win.style.margin = "auto";
+      win.style.border = "solid 4px black";
+      win.style.padding = "0";
+      win.style.color = "blue";
+      win.style.backgroundColor = "#ADFF2F";
+      win.style.opacity = "0.93";
+      win.style.textAlign = "center";
+      win.style.position = "absolute";
+      win.style.left = "0px";
+      win.style.top = "0px";
+      win.style.zIndex = "10";
+      main.appendChild(win);
+
+      winMessage = document.createElement('div');
+      winMessage.style.margin = "auto";
+      winMessage.innerHTML = "You won!!!";
+      winMessage.style.display = "table-cell";
+      winMessage.style.position = "relative";
+      winMessage.style.textAlign = "center";
+      winMessage.style.verticalAlign = "middle";
+      winMessage.style.fontSize = "95px";
+    
+      win.appendChild(winMessage);
+
+    }
+  }
+  
+  function newGame() {
+    body.innerHTML = "";
+    game();
+  }
+  
+  function chooseGame(event) {
+    //alert(event.target.selectedIndex);
+    selGameIndex = event.target.selectedIndex;
+  }
+  
+  
+  
+</script>
+    
+
+
+</body>
+
+</html>

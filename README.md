@@ -1,9 +1,9 @@
 # games
 
-sudoku.html
-
-Javascript sudoku is one page application.
-It consists of three preporgrammed sudoku boards for which the choice is made by drop down
+JavaScript sudoku
+-----------------
+Javascript sudoku is one page application consisting of file sudoku.html.
+It consists of three preporgrammed sudoku boards for which the choice is made by the drop down
 on the top left of the screen. Games available are named: "Game 1", "Game 2" and "Game 3".
 Button "New Game" starts currently selected game.
 Upon start, "Game 1" is started.

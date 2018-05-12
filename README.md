@@ -12,5 +12,4 @@ Below game board is the "Check for Victory" button, that congratulates the playe
 Keys for playing the game are:
 - cursor keys: up, down, left and right
 - numeric keys
-- delete: clear current cell
-- backspace: clear current cell
+- delete, backspace: clear current cell
